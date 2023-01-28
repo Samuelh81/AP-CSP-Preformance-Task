@@ -8,14 +8,27 @@
     <title>AP CSP Create Performance Task</title>
 </head>
 <body>
-    <div id="contents">
-
+    <div id="inputContents">
         <canvas id="displayCanvas" height="100" width="100"></canvas>
         <input id="imageUpload" type="file" name="image" accept="image/png">
+        <form id="options">
+            <label for="type">Choose a filter:</label>
+            <select name="filters" id="type">
+                <option value="removeRed">Remove Red</option>
+                <option value="removeGreen">Remove Green</option>
+                <option value="removeBlue">Remove Blue</option>
 
-    
+            </select>
+            <input type="button" value="Generate" onclick="generate()">
+        </form>
     </div>
 
+    <hr>
+
+    <div id="outputContents">
+        <h1 id="outputTitle">OUTPUT</h1>
+        <canvas id="outputCanvas" height="100" width="100"></canvas>
+    </div>
 
 
     <script src="./js/script.js"></script>
