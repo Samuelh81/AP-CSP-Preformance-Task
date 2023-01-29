@@ -47,6 +47,10 @@ function generate() {
             primitiveAlgorithm("removeGreen");
         } else if (checkInput() == "removeBlue") {
             primitiveAlgorithm("removeBlue");
+        } else  if (checkInput() == "makeGray") {
+            primitiveAlgorithm("makeGray")
+        } else if (checkInput() == "invert") {
+            primitiveAlgorithm("invert");
         } else {
             alert("Invalid Selection");
         }
@@ -64,24 +68,35 @@ function primitiveAlgorithm(mode) {
                 var a = getPixelData(x,y).alpha;
             if (mode == "removeRed") {
                 if (!(a == 0)) {
-                outputCtx.fillStyle = "rgba("+0+","+g+","+b+","+a+")";
-                outputCtx.fillRect(x,y,1,1);
+                    outputCtx.fillStyle = "rgba("+0+","+g+","+b+","+a+")";
+                    outputCtx.fillRect(x,y,1,1);
                 }
             } else if (mode == "removeGreen") {
                 if (!(a == 0)) {
-                outputCtx.fillStyle = "rgba("+r+","+0+","+b+","+a+")";
-                outputCtx.fillRect(x,y,1,1);
+                    outputCtx.fillStyle = "rgba("+r+","+0+","+b+","+a+")";
+                    outputCtx.fillRect(x,y,1,1);
                 }
             } else if (mode == "removeBlue") {
                 if (!(a == 0)) {
-                outputCtx.fillStyle = "rgba("+r+","+g+","+0+","+a+")";
-                outputCtx.fillRect(x,y,1,1);
+                    outputCtx.fillStyle = "rgba("+r+","+g+","+0+","+a+")";
+                    outputCtx.fillRect(x,y,1,1);
                 }
-            } else {console.log("NEITHER");}
+            } else if (mode == "makeGray"){
+                if (!(a == 0)) {
+                    var gray = (r+g+b)/3
+                    outputCtx.fillStyle = "rgba("+gray+","+gray+","+gray+","+a+")"
+                    outputCtx.fillRect(x,y,1,1);
+                }
+            } else if (mode == "invert") {
+                if (!(a == 0)) {
+                    outputCtx.fillStyle = "rgba("+(255-r)+","+(255-g)+","+(255-b)+","+a+")"
+                    outputCtx.fillRect(x,y,1,1);
+                }
+            }
         }
     }
 }
-
+// r= 255-r
 // Misc
 
 function setOutputVisibility(show) {
