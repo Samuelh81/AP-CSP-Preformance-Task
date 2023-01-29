@@ -5,6 +5,7 @@ var displayCtx;
 var outputCanvas;
 var outputCtx
 var imageReceived = false;
+var imageDimensions = new Map();
 
 document.getElementById('imageUpload').onchange = function() {
     img.onload = draw;
@@ -18,7 +19,13 @@ function draw() {
     displayCanvas.height = this.height;
     displayCtx = displayCanvas.getContext('2d', {willReadFrequently: true});
     displayCtx.drawImage(this, 0, 0, this.width, this.height);
+    imageDimensions.set("height", displayCanvas.height);
+    imageDimensions.set("width", displayCanvas.width);
+    imageDimensions.set("pixels", displayCanvas.width * displayCanvas.height);
     imageReceived = true;
+    if (imageDimensions.get("pixels") >= 465000) {
+    alert("Large image detected. Processing may take some time.");
+    }
 };
 function failed() {
     console.error("An error occurred when processing the input image");
@@ -30,22 +37,48 @@ function failed() {
 function generate() {
     if (imageReceived) {
         outputCanvas = document.getElementById('outputCanvas');
+        outputCtx = outputCanvas.getContext('2d');
         outputCanvas.width = displayCanvas.width;
         outputCanvas.height = displayCanvas.height;
-
+        setOutputVisibility(true);
         if (checkInput() == "removeRed") {
-            // Remove Red Algorithm
+            primitiveAlgorithm("removeRed");
         } else if (checkInput() == "removeGreen") {
-            // Remove Green Algorithm
+            primitiveAlgorithm("removeGreen");
         } else if (checkInput() == "removeBlue") {
-            // Remove Blue Algorithm
+            primitiveAlgorithm("removeBlue");
         } else {
             alert("Invalid Selection");
         }
-
-        setOutputVisibility(true);
     } else {
         alert("Please Upload a Valid Image");
+    }
+}
+
+function primitiveAlgorithm(mode) {
+    for (var x=0;x<imageDimensions.get("width");x++) {
+        for (var y=0;y<imageDimensions.get("height");y++) {
+                var r = getPixelData(x,y).red;
+                var g = getPixelData(x,y).green;
+                var b = getPixelData(x,y).blue;
+                var a = getPixelData(x,y).alpha;
+            if (mode == "removeRed") {
+                if (!(a == 0)) {
+                outputCtx.fillStyle = "rgba("+0+","+g+","+b+","+a+")";
+                outputCtx.fillRect(x,y,1,1);
+                }
+            } else if (mode == "removeGreen") {
+                if (!(a == 0)) {
+                outputCtx.fillStyle = "rgba("+r+","+0+","+b+","+a+")";
+                outputCtx.fillRect(x,y,1,1);
+                }
+            } else if (mode == "removeBlue") {
+                if (!(a == 0)) {
+                outputCtx.fillStyle = "rgba("+r+","+g+","+0+","+a+")";
+                outputCtx.fillRect(x,y,1,1);
+                }
+            } else {console.log("NEITHER");}
+        }
     }
 }
 
