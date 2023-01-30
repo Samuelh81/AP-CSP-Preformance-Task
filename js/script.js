@@ -58,6 +58,8 @@ function generate() {
             primitiveAlgorithm("shift");
         } else if (checkInput() == "randomInvert") {
             primitiveAlgorithm("randomInvert");
+        } else if (checkInput() == "noise") {
+            primitiveAlgorithm("noise");
         }
     } else {
         alert("Please Upload a Valid Image");
@@ -74,53 +76,60 @@ function primitiveAlgorithm(mode) {
                 var g = getPixelData(x,y).green;
                 var b = getPixelData(x,y).blue;
                 var a = getPixelData(x,y).alpha;
-            if (mode == "removeRed") {
-                if (!(a == 0)) {
-                    outputCtx.fillStyle = "rgba("+0+","+g+","+b+","+a+")";
-                    outputCtx.fillRect(x,y,1,1);
-                }
-            } else if (mode == "removeGreen") {
-                if (!(a == 0)) {
-                    outputCtx.fillStyle = "rgba("+r+","+0+","+b+","+a+")";
-                    outputCtx.fillRect(x,y,1,1);
-                }
-            } else if (mode == "removeBlue") {
-                if (!(a == 0)) {
-                    outputCtx.fillStyle = "rgba("+r+","+g+","+0+","+a+")";
-                    outputCtx.fillRect(x,y,1,1);
-                }
-            } else if (mode == "makeGray"){
-                if (!(a == 0)) {
-                    var gray = (r+g+b)/3
-                    outputCtx.fillStyle = "rgba("+gray+","+gray+","+gray+","+a+")";
-                    outputCtx.fillRect(x,y,1,1);
-                }
-            } else if (mode == "invert") {
-                if (!(a == 0)) {
-                    outputCtx.fillStyle = "rgba("+(255-r)+","+(255-g)+","+(255-b)+","+a+")";
-                    outputCtx.fillRect(x,y,1,1);
-                }
-            } else if (mode == "static") {
-                if (!(a == 0)) {
+                if (mode == "removeRed") {
+                    if (!(a == 0)) {
+                        outputCtx.fillStyle = "rgba("+0+","+g+","+b+","+a+")";
+                        outputCtx.fillRect(x,y,1,1);
+                    }
+                } else if (mode == "removeGreen") {
+                    if (!(a == 0)) {
+                        outputCtx.fillStyle = "rgba("+r+","+0+","+b+","+a+")";
+                        outputCtx.fillRect(x,y,1,1);
+                    }
+                } else if (mode == "removeBlue") {
+                    if (!(a == 0)) {
+                        outputCtx.fillStyle = "rgba("+r+","+g+","+0+","+a+")";
+                        outputCtx.fillRect(x,y,1,1);
+                    }
+                } else if (mode == "makeGray") {
+                    if (!(a == 0)) {
+                        var gray = (r+g+b)/3
+                        outputCtx.fillStyle = "rgba("+gray+","+gray+","+gray+","+a+")";
+                        outputCtx.fillRect(x,y,1,1);
+                    }
+                } else if (mode == "invert") {
+                    if (!(a == 0)) {
+                        outputCtx.fillStyle = "rgba("+(255-r)+","+(255-g)+","+(255-b)+","+a+")";
+                        outputCtx.fillRect(x,y,1,1);
+                    }
+                } else if (mode == "static") {
+                    if (!(a == 0)) {
+                        var rand = Math.random();
+                        outputCtx.fillStyle = "rgba("+r*rand+","+g*rand+","+b*rand+","+a*rand+")";
+                        outputCtx.fillRect(x,y,1,1);
+                    }
+                } else if (mode == "shift") {
+                    if (!(a == 0)) {
+                        outputCtx.fillStyle = "rgba("+b+","+r+","+g+","+a+")";
+                        outputCtx.fillRect(x,y,1,1);
+                    }
+                } else if (mode == "randomInvert") {
                     var rand = Math.random();
-                    outputCtx.fillStyle = "rgba("+r*rand+","+g*rand+","+b*rand+","+a*rand+")";
-                    outputCtx.fillRect(x,y,1,1);
+                    if (rand > 0.5) {
+                        outputCtx.fillStyle = "rgba("+(255-r)+","+(255-g)+","+(255-b)+","+a+")";
+                        outputCtx.fillRect(x,y,1,1);
+                    } else {
+                        outputCtx.fillStyle = "rgba("+r+","+g+","+b+","+a+")";
+                        outputCtx.fillRect(x,y,1,1);
+                    }
+                } else if (mode == "noise") {
+                    if (!(a == 0)) {
+                        var rand = Math.random() * (1 - .75) + .75;
+                        outputCtx.fillStyle = "rgba("+r*rand+","+g*rand+","+b*rand+","+a*rand+")";
+                        outputCtx.fillRect(x,y,1,1);
+                        console.log("sus");
+                    }
                 }
-            } else if (mode == "shift") {
-                if (!(a == 0)) {
-                    outputCtx.fillStyle = "rgba("+b+","+r+","+g+","+a+")";
-                    outputCtx.fillRect(x,y,1,1);
-                }
-            } else if (mode == "randomInvert") {
-                var rand = Math.random();
-                if (rand > 0.5) {
-                    outputCtx.fillStyle = "rgba("+(255-r)+","+(255-g)+","+(255-b)+","+a+")";
-                    outputCtx.fillRect(x,y,1,1);
-                } else {
-                    outputCtx.fillStyle = "rgba("+r+","+g+","+b+","+a+")";
-                    outputCtx.fillRect(x,y,1,1);
-                }
-            }
         }
     }
     recentFilter = checkInput();

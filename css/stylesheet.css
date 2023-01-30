@@ -1,8 +1,8 @@
 :root {
-    --palette1: #6456BB;
-    --palette2: #A084DC;
-    --palette3: #BFACE2;
-    --palette4: #EBC7E6;
+    --palette1: #8BBCCC;
+    --palette2: #4C6793;
+    --palette3: #5C2E7E;
+    --palette4: #000000;
 }
 
 /* font pulled from https://fonts.google.com/specimen/Unbounded */
@@ -76,7 +76,13 @@ input#download {
 /* ---------- general ---------- */
 
 input.button {
-    background-color: var(--palette4);
+    background-color: var(--palette2);
     border-width: 0px;
     border-radius: 5px;
+}
+
+input.button:hover {
+    transition: .5s;
+    scale: 1.15;
+    background-color: var(--palette3);
 }
