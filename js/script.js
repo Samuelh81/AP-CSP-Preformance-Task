@@ -3,9 +3,10 @@ var pageWidth = getWidth();
 var displayCanvas;
 var displayCtx;
 var outputCanvas;
-var outputCtx
+var outputCtx;
 var imageReceived = false;
 var imageDimensions = new Map();
+var recentFilter;
 
 document.getElementById('imageUpload').onchange = function() {
     img.onload = draw;
@@ -51,14 +52,21 @@ function generate() {
             primitiveAlgorithm("makeGray")
         } else if (checkInput() == "invert") {
             primitiveAlgorithm("invert");
-        } else {
-            alert("Invalid Selection");
+        } else if (checkInput() == "static") {
+            primitiveAlgorithm("static");
+        } else if (checkInput() == "shift") {
+            primitiveAlgorithm("shift");
+        } else if (checkInput() == "randomInvert") {
+            primitiveAlgorithm("randomInvert");
         }
     } else {
         alert("Please Upload a Valid Image");
     }
 }
 
+// For the purposes of this program, a primitive algorithm
+// is defined as an algorithm that modifies pixel values 
+// based solely on the original value of that one pixel.
 function primitiveAlgorithm(mode) {
     for (var x=0;x<imageDimensions.get("width");x++) {
         for (var y=0;y<imageDimensions.get("height");y++) {
@@ -84,19 +92,40 @@ function primitiveAlgorithm(mode) {
             } else if (mode == "makeGray"){
                 if (!(a == 0)) {
                     var gray = (r+g+b)/3
-                    outputCtx.fillStyle = "rgba("+gray+","+gray+","+gray+","+a+")"
+                    outputCtx.fillStyle = "rgba("+gray+","+gray+","+gray+","+a+")";
                     outputCtx.fillRect(x,y,1,1);
                 }
             } else if (mode == "invert") {
                 if (!(a == 0)) {
-                    outputCtx.fillStyle = "rgba("+(255-r)+","+(255-g)+","+(255-b)+","+a+")"
+                    outputCtx.fillStyle = "rgba("+(255-r)+","+(255-g)+","+(255-b)+","+a+")";
+                    outputCtx.fillRect(x,y,1,1);
+                }
+            } else if (mode == "static") {
+                if (!(a == 0)) {
+                    var rand = Math.random();
+                    outputCtx.fillStyle = "rgba("+r*rand+","+g*rand+","+b*rand+","+a*rand+")";
+                    outputCtx.fillRect(x,y,1,1);
+                }
+            } else if (mode == "shift") {
+                if (!(a == 0)) {
+                    outputCtx.fillStyle = "rgba("+b+","+r+","+g+","+a+")";
+                    outputCtx.fillRect(x,y,1,1);
+                }
+            } else if (mode == "randomInvert") {
+                var rand = Math.random();
+                if (rand > 0.5) {
+                    outputCtx.fillStyle = "rgba("+(255-r)+","+(255-g)+","+(255-b)+","+a+")";
+                    outputCtx.fillRect(x,y,1,1);
+                } else {
+                    outputCtx.fillStyle = "rgba("+r+","+g+","+b+","+a+")";
                     outputCtx.fillRect(x,y,1,1);
                 }
             }
         }
     }
+    recentFilter = checkInput();
 }
-// r= 255-r
+
 // Misc
 
 function setOutputVisibility(show) {
@@ -132,3 +161,11 @@ function getWidth() {
   );
 }
 // End cited code
+
+function download() {
+  var image = outputCanvas.toDataURL("image/png", 1.0).replace("image/png", "image/octet-stream");
+  var link = document.createElement('a');
+  link.download = recentFilter + " " + document.getElementById("imageUpload").files.item(0).name;
+  link.href = image;
+  link.click();
+}

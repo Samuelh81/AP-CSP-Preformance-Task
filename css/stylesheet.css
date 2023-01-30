@@ -1,5 +1,20 @@
+:root {
+    --palette1: #6456BB;
+    --palette2: #A084DC;
+    --palette3: #BFACE2;
+    --palette4: #EBC7E6;
+}
+
+/* font pulled from https://fonts.google.com/specimen/Unbounded */
+@font-face {
+    font-family: 'unbounded';
+    src: url(./Unbounded-VariableFont_wght.ttf);
+}
+
 body {
-    background-color: #b1b1b1;
+    background-color: var(--palette1);
+    font-family: 'unbounded', serif;
+
 }
 
 div#inputContents {
@@ -42,7 +57,7 @@ h1#outputTitle {
 div#outputContents {
     display: grid;
     grid-template-columns: 15% 85%;
-    grid-template-rows: auto 25px auto;
+    grid-template-rows: auto 25px auto auto;
     visibility: hidden;
 }
 
@@ -52,3 +67,16 @@ canvas#outputCanvas {
     grid-row: 3;
 }
 
+input#download {
+    grid-column: 2;
+    grid-row: 4;
+    width: fit-content;
+}
+
+/* ---------- general ---------- */
+
+input.button {
+    background-color: var(--palette4);
+    border-width: 0px;
+    border-radius: 5px;
+}

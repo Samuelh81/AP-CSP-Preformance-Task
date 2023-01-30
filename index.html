@@ -19,9 +19,12 @@
                 <option value="removeBlue">Remove Blue</option>
                 <option value="makeGray">Convert to Grayscale</option>
                 <option value="invert">Invert</option>
+                <option value="static">Static</option>
+                <option value="shift">Shift</option>
+                <option value="randomInvert">Random Inversion</option>
 
             </select>
-            <input type="button" value="Generate" onclick="generate()">
+            <input class="button" type="button" value="Generate" onclick="generate()">
         </form>
     </div>
 
@@ -30,6 +33,7 @@
     <div id="outputContents">
         <h1 id="outputTitle">OUTPUT</h1>
         <canvas id="outputCanvas" height="100" width="100"></canvas>
+        <input class="button" id="download" type="button" value="Download" onclick="download()">
     </div>
 
 
