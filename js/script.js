@@ -72,10 +72,11 @@ function generate() {
 function primitiveAlgorithm(mode) {
     for (var x=0;x<imageDimensions.get("width");x++) {
         for (var y=0;y<imageDimensions.get("height");y++) {
-                var r = getPixelData(x,y).red;
-                var g = getPixelData(x,y).green;
-                var b = getPixelData(x,y).blue;
-                var a = getPixelData(x,y).alpha;
+                var px = getPixelData(x,y);
+                var r = px.red;
+                var g = px.green;
+                var b = px.blue;
+                var a = px.alpha;
                 if (mode == "removeRed") {
                     if (!(a == 0)) {
                         outputCtx.fillStyle = "rgba("+0+","+g+","+b+","+a+")";
