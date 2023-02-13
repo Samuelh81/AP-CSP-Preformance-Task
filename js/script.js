@@ -160,7 +160,8 @@ function getPixelData(x,y) {
     return { red,green,blue,alpha }
 }
 
-// Citing getWidth from https://stackoverflow.com/questions/1038727/how-to-get-browser-width-using-javascript-code 
+// Citing getWidth 
+// from https://stackoverflow.com/questions/1038727/how-to-get-browser-width-using-javascript-code 
 function getWidth() {
   return Math.max(
     document.body.scrollWidth,
