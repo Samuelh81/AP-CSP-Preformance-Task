@@ -130,7 +130,6 @@ function primitiveAlgorithm(mode) {
                         var rand = Math.random() * (1 - .75) + .75;
                         outputCtx.fillStyle = "rgba("+r*rand+","+g*rand+","+b*rand+","+a*rand+")";
                         outputCtx.fillRect(x,y,1,1);
-                        console.log("sus");
                     }
                 }
         }
