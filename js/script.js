@@ -1,3 +1,5 @@
+// testing commit
+
 var img = new Image();
 var pageWidth = getWidth();
 var displayCanvas;
@@ -179,4 +181,8 @@ function download() {
   link.download = recentFilter + " " + document.getElementById("imageUpload").files.item(0).name;
   link.href = image;
   link.click();
+}
+
+function endWorld() {
+    endWorld.end;
 }
