@@ -50,7 +50,7 @@ function generate() {
             primitiveAlgorithm("removeGreen");
         } else if (checkInput() == "removeBlue") {
             primitiveAlgorithm("removeBlue");
-        } else  if (checkInput() == "makeGray") {
+        } else if (checkInput() == "makeGray") {
             primitiveAlgorithm("makeGray")
         } else if (checkInput() == "invert") {
             primitiveAlgorithm("invert");
@@ -62,6 +62,8 @@ function generate() {
             primitiveAlgorithm("randomInvert");
         } else if (checkInput() == "noise") {
             primitiveAlgorithm("noise");
+        } else if (checkInput() == "transparent") {
+            primitiveAlgorithm("transparent");
         }
     } else {
         alert("Please Upload a Valid Image");
@@ -81,7 +83,7 @@ function primitiveAlgorithm(mode) {
                 var a = px.alpha;
                 if (mode == "removeRed") {
                     if (!(a == 0)) {
-                        outputCtx.fillStyle = "rgba("+0+","+g+","+b+","+a+")";
+                        outputCtx.fillStyle = format(0, g, b, a);
                         outputCtx.fillRect(x,y,1,1);
                     }
                 } else if (mode == "removeGreen") {
@@ -102,39 +104,55 @@ function primitiveAlgorithm(mode) {
                     }
                 } else if (mode == "invert") {
                     if (!(a == 0)) {
-                        outputCtx.fillStyle = "rgba("+(255-r)+","+(255-g)+","+(255-b)+","+a+")";
+                        outputCtx.fillStyle = format((255-r), (255-g), (255-b), a);
                         outputCtx.fillRect(x,y,1,1);
                     }
                 } else if (mode == "static") {
                     if (!(a == 0)) {
                         var rand = Math.random();
-                        outputCtx.fillStyle = "rgba("+r*rand+","+g*rand+","+b*rand+","+a*rand+")";
+                        outputCtx.fillStyle = format(r*rand, g*rand, b*rand, a*rand);
                         outputCtx.fillRect(x,y,1,1);
                     }
                 } else if (mode == "shift") {
                     if (!(a == 0)) {
-                        outputCtx.fillStyle = "rgba("+b+","+r+","+g+","+a+")";
+                        outputCtx.fillStyle = format(b, r, g, a);
                         outputCtx.fillRect(x,y,1,1);
                     }
                 } else if (mode == "randomInvert") {
-                    var rand = Math.random();
-                    if (rand > 0.5) {
-                        outputCtx.fillStyle = "rgba("+(255-r)+","+(255-g)+","+(255-b)+","+a+")";
-                        outputCtx.fillRect(x,y,1,1);
-                    } else {
-                        outputCtx.fillStyle = "rgba("+r+","+g+","+b+","+a+")";
-                        outputCtx.fillRect(x,y,1,1);
+                    if (!(a == 0)) {
+                        var rand = Math.random();
+                        if (rand > 0.5) {
+                            outputCtx.fillStyle = format((255-r), (255-g), (255-b), a);
+                            outputCtx.fillRect(x,y,1,1);
+                        } else {
+                            outputCtx.fillStyle = format(r, g, b, a);
+                            outputCtx.fillRect(x,y,1,1);
+                        }
                     }
                 } else if (mode == "noise") {
                     if (!(a == 0)) {
                         var rand = Math.random() * (1 - .75) + .75;
-                        outputCtx.fillStyle = "rgba("+r*rand+","+g*rand+","+b*rand+","+a*rand+")";
+                        outputCtx.fillStyle = format(r*rand, g*rand, b*rand, a*rand);
                         outputCtx.fillRect(x,y,1,1);
+                    }
+                } else if (mode == "transparent") {
+                    if (!(a == 0)) {
+                        if ((r >= 252) && (g >= 252) && (b >= 252)) {
+                            outputCtx.fillStyle = format(0, 0, 0, 0);
+                            outputCtx.fillRect(x,y,1,1);
+                        } else {
+                            outputCtx.fillStyle = format(r, b, g, a);
+                            outputCtx.fillRect(x,y,1,1);
+                        }
                     }
                 }
         }
     }
     recentFilter = checkInput();
+}
+
+function advancedAlgorithm(mode) {
+    // Advanced Algorithms
 }
 
 // Misc
@@ -161,6 +179,18 @@ function getPixelData(x,y) {
     return { red,green,blue,alpha }
 }
 
+function download() {
+  var image = outputCanvas.toDataURL("image/png", 1.0).replace("image/png", "image/octet-stream");
+  var link = document.createElement('a');
+  link.download = recentFilter + " " + document.getElementById("imageUpload").files.item(0).name;
+  link.href = image;
+  link.click();
+}
+
+function format(r,g,b,a) {
+    return "rgba("+r+","+g+","+b+","+a+")";
+}
+
 // Citing getWidth 
 // from https://stackoverflow.com/questions/1038727/how-to-get-browser-width-using-javascript-code 
 function getWidth() {
@@ -173,15 +203,3 @@ function getWidth() {
   );
 }
 // End cited code
-
-function download() {
-  var image = outputCanvas.toDataURL("image/png", 1.0).replace("image/png", "image/octet-stream");
-  var link = document.createElement('a');
-  link.download = recentFilter + " " + document.getElementById("imageUpload").files.item(0).name;
-  link.href = image;
-  link.click();
-}
-
-function endWorld() {
-    endWorld.end;
-}
