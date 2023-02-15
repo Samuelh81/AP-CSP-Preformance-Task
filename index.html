@@ -15,17 +15,26 @@
         <form id="options">
             <label for="type">Choose a filter:</label>
             <select name="filters" id="type">
-                <option value="removeRed">Remove Red</option>
-                <option value="removeGreen">Remove Green</option>
-                <option value="removeBlue">Remove Blue</option>
-                <option value="makeGray">Convert to Grayscale</option>
-                <option value="invert">Invert Colors</option>
-                <option value="static">Static</option>
-                <option value="shift">Shift</option>
-                <option value="randomInvert">Random Inversion</option>
-                <option value="noise">Noise</option>
-                <option value="transparent">Make White Transparent</option>
-
+                <optgroup label="-Remove Colors-">
+                    <option value="removeRed">Remove Red</option>
+                    <option value="removeGreen">Remove Green</option>
+                    <option value="removeBlue">Remove Blue</option>
+                </optgroup>
+                <optgroup label="-Invert Colors-">
+                    <option value="invert">Invert Colors</option>
+                    <option value="randomInvert">Randomly Invert Colors</option>
+                </optgroup>
+                <optgroup label="-Shift Colors-">
+                    <option value="shift1">1 Shift</option>
+                    <option value="shift2">2 Shift</option>
+                </optgroup>
+                <optgroup  label="-Misc-">
+                    <option value="makeGray">Convert to Grayscale</option>
+                    <option value="static">Add Static</option>
+                    <option value="noise">Make Noisy</option>
+                    <option value="transparent">Turn White Transparent</option>
+                    <option value="randomDelete">Randomly Delete</option>
+                </optgroup>
             </select>
             <input class="button" type="button" value="Generate" onclick="generate()">
         </form>

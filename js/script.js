@@ -1,5 +1,3 @@
-// testing commit
-
 var img = new Image();
 var pageWidth = getWidth();
 var displayCanvas;
@@ -9,6 +7,20 @@ var outputCtx;
 var imageReceived = false;
 var imageDimensions = new Map();
 var recentFilter;
+var filters = new Map();
+    filters.set("removeRed", "Remove Red");
+    filters.set("removeGreen", "Remove Green");
+    filters.set("removeBlue", "Remove Blue");
+    filters.set("invert", "Invert Colors");
+    filters.set("randomInvert", "Randomly Invert Colors");
+    filters.set("removeRed", "Remove Red");
+    filters.set("shift1", "1 Shift");
+    filters.set("shift2", "2 Shift");
+    filters.set("makeGray", "Convert to Grayscale");
+    filters.set("static", "Add Static");
+    filters.set("noise", "Make Noisy");
+    filters.set("transparent", "Make White Transparent");
+    filters.set("randomDelete", "Randomly Delete");
 
 document.getElementById('imageUpload').onchange = function() {
     img.onload = draw;
@@ -44,27 +56,7 @@ function generate() {
         outputCanvas.width = displayCanvas.width;
         outputCanvas.height = displayCanvas.height;
         setOutputVisibility(true);
-        if (checkInput() == "removeRed") {
-            primitiveAlgorithm("removeRed");
-        } else if (checkInput() == "removeGreen") {
-            primitiveAlgorithm("removeGreen");
-        } else if (checkInput() == "removeBlue") {
-            primitiveAlgorithm("removeBlue");
-        } else if (checkInput() == "makeGray") {
-            primitiveAlgorithm("makeGray")
-        } else if (checkInput() == "invert") {
-            primitiveAlgorithm("invert");
-        } else if (checkInput() == "static") {
-            primitiveAlgorithm("static");
-        } else if (checkInput() == "shift") {
-            primitiveAlgorithm("shift");
-        } else if (checkInput() == "randomInvert") {
-            primitiveAlgorithm("randomInvert");
-        } else if (checkInput() == "noise") {
-            primitiveAlgorithm("noise");
-        } else if (checkInput() == "transparent") {
-            primitiveAlgorithm("transparent");
-        }
+        primitiveAlgorithm(checkInput());
     } else {
         alert("Please Upload a Valid Image");
     }
@@ -74,8 +66,8 @@ function generate() {
 // is defined as an algorithm that modifies pixel values 
 // based solely on the original value of that one pixel.
 function primitiveAlgorithm(mode) {
-    for (var x=0;x<imageDimensions.get("width");x++) {
-        for (var y=0;y<imageDimensions.get("height");y++) {
+    for (var x=0; x<imageDimensions.get("width"); x++) {
+        for (var y=0; y<imageDimensions.get("height"); y++) {
                 var px = getPixelData(x,y);
                 var r = px.red;
                 var g = px.green;
@@ -113,9 +105,14 @@ function primitiveAlgorithm(mode) {
                         outputCtx.fillStyle = format(r*rand, g*rand, b*rand, a*rand);
                         outputCtx.fillRect(x,y,1,1);
                     }
-                } else if (mode == "shift") {
+                } else if (mode == "shift1") {
                     if (!(a == 0)) {
                         outputCtx.fillStyle = format(b, r, g, a);
+                        outputCtx.fillRect(x,y,1,1);
+                    }
+                } else if (mode == "shift2") {
+                    if (!(a == 0)) {
+                        outputCtx.fillStyle = format(g, b, r, a)
                         outputCtx.fillRect(x,y,1,1);
                     }
                 } else if (mode == "randomInvert") {
@@ -137,14 +134,25 @@ function primitiveAlgorithm(mode) {
                     }
                 } else if (mode == "transparent") {
                     if (!(a == 0)) {
-                        if ((r >= 252) && (g >= 252) && (b >= 252)) {
+                        if ((r+g+b)>=725) {
                             outputCtx.fillStyle = format(0, 0, 0, 0);
                             outputCtx.fillRect(x,y,1,1);
                         } else {
-                            outputCtx.fillStyle = format(r, b, g, a);
+                            outputCtx.fillStyle = format(r, g, b, a);
                             outputCtx.fillRect(x,y,1,1);
                         }
                     }
+                } else if (mode == "randomDelete") {
+                   if (!(a == 0)) {
+                        var rand = Math.random();
+                        if (rand > 0.5) {
+                            outputCtx.fillStyle = format(0, 0, 0, 0);
+                            outputCtx.fillRect(x,y,1,1);
+                        } else {
+                            outputCtx.fillStyle = format(r, g, b, a);
+                            outputCtx.fillRect(x,y,1,1);
+                        }
+                   } 
                 }
         }
     }
@@ -153,6 +161,11 @@ function primitiveAlgorithm(mode) {
 
 function advancedAlgorithm(mode) {
     // Advanced Algorithms
+    let kernel = [
+        [1, 2, 1],
+        [2, 4, 2],
+        [1, 2, 1]
+    ];
 }
 
 // Misc
@@ -182,7 +195,7 @@ function getPixelData(x,y) {
 function download() {
   var image = outputCanvas.toDataURL("image/png", 1.0).replace("image/png", "image/octet-stream");
   var link = document.createElement('a');
-  link.download = recentFilter + " " + document.getElementById("imageUpload").files.item(0).name;
+  link.download = "{" + filters.get(recentFilter) + "} " + document.getElementById("imageUpload").files.item(0).name;
   link.href = image;
   link.click();
 }
