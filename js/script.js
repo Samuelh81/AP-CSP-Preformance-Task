@@ -134,7 +134,7 @@ function primitiveAlgorithm(mode) {
                     }
                 } else if (mode == "transparent") {
                     if (!(a == 0)) {
-                        if ((r+g+b)>=725) {
+                        if ((r+g+b)>=710) {
                             outputCtx.fillStyle = format(0, 0, 0, 0);
                             outputCtx.fillRect(x,y,1,1);
                         } else {
@@ -216,3 +216,7 @@ function getWidth() {
   );
 }
 // End cited code
+
+function reupload() {
+    displayCtx.drawImage(outputCanvas, 0, 0);
+}

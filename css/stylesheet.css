@@ -67,7 +67,7 @@ canvas#outputCanvas {
     grid-row: 3;
 }
 
-input#download {
+input#outputButton {
     grid-column: 2;
     grid-row: 4;
     width: fit-content;
