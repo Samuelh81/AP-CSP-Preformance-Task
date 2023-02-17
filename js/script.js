@@ -7,6 +7,7 @@ var outputCtx;
 var imageReceived = false;
 var imageDimensions = new Map();
 var recentFilter;
+var recentFileName = null;
 var filters = new Map();
     filters.set("removeRed", "Remove Red");
     filters.set("removeGreen", "Remove Green");
@@ -30,17 +31,21 @@ document.getElementById('imageUpload').onchange = function() {
 function draw() {
     displayCanvas = document.getElementById('displayCanvas');
     // 'this' references the uploaded image
-    displayCanvas.width = this.width;
-    displayCanvas.height = this.height;
+    imageDimensions.set("height", this.height);
+    imageDimensions.set("width", this.width);
+    imageDimensions.set("pixels", this.width * this.height);
+    if (imageDimensions.get("pixels") >= 1000000) {
+        alert("Image is too large to be processed");
+        return;
+    } else if (imageDimensions.get("pixels") >= 465000) {
+        alert("Large image detected. Processing may take a while.");
+    }
+    displayCanvas.width = imageDimensions.get("width");
+    displayCanvas.height = imageDimensions.get("height");
     displayCtx = displayCanvas.getContext('2d', {willReadFrequently: true});
     displayCtx.drawImage(this, 0, 0, this.width, this.height);
-    imageDimensions.set("height", displayCanvas.height);
-    imageDimensions.set("width", displayCanvas.width);
-    imageDimensions.set("pixels", displayCanvas.width * displayCanvas.height);
     imageReceived = true;
-    if (imageDimensions.get("pixels") >= 465000) {
-    alert("Large image detected. Processing may take some time.");
-    }
+    recentFileName = document.getElementById("imageUpload").files.item(0).name;
 };
 function failed() {
     console.error("An error occurred when processing the input image");
@@ -60,7 +65,7 @@ function generate() {
     } else {
         alert("Please Upload a Valid Image");
     }
-}
+};
 
 // For the purposes of this program, a primitive algorithm
 // is defined as an algorithm that modifies pixel values 
@@ -157,7 +162,7 @@ function primitiveAlgorithm(mode) {
         }
     }
     recentFilter = checkInput();
-}
+};
 
 function advancedAlgorithm(mode) {
     // Advanced Algorithms
@@ -195,7 +200,7 @@ function getPixelData(x,y) {
 function download() {
   var image = outputCanvas.toDataURL("image/png", 1.0).replace("image/png", "image/octet-stream");
   var link = document.createElement('a');
-  link.download = "{" + filters.get(recentFilter) + "} " + document.getElementById("imageUpload").files.item(0).name;
+  link.download = "{" + filters.get(recentFilter) + "} " + recentFileName;
   link.href = image;
   link.click();
 }

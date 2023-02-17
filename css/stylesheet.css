@@ -57,7 +57,7 @@ h1#outputTitle {
 div#outputContents {
     display: grid;
     grid-template-columns: 15% 85%;
-    grid-template-rows: auto 25px auto auto;
+    grid-template-rows: auto 25px auto auto 10px auto;
     visibility: hidden;
 }
 
@@ -67,9 +67,15 @@ canvas#outputCanvas {
     grid-row: 3;
 }
 
-input#outputButton {
+input#download {
     grid-column: 2;
     grid-row: 4;
+    width: fit-content;
+}
+
+input#reupload {
+    grid-column: 2;
+    grid-row: 6;
     width: fit-content;
 }
 
