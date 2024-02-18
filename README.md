@@ -2,4 +2,4 @@
 
 ## Description:
 
-My Advanced Placement Computer Science Principles Create Performance Task for the school year 2022-2023
+My Advanced Placement Computer Science Principles Create Performance Task for the 2022-2023 school year.
